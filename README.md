@@ -53,4 +53,4 @@ If detection stays paused, confirm the exact iVMS executable name in Task Manage
 .venv\Scripts\python -m unittest test_live_detection.py
 ```
 
-Tests use synthetic images and mocked Windows calls. Camera footage and personal screenshots are not included.
+Tests use synthetic images and mocked Windows calls. Two example shop screenshots are included: `for mac2.png` shows stopped cameras with four Play buttons; `for mac.png` shows active cameras with no central Play buttons.
