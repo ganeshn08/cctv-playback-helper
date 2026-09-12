@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+# Private shop screenshots stay local.
+for mac*.png
+*.local.md
+LESSON-*.md
+*.zip
+*.rar
+.DS_Store
