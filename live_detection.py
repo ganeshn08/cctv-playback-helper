@@ -51,6 +51,16 @@ def inspect_once(get_target, capture, template, threshold):
     return {"status": "observing", "count": len(matches), "buttons": matches}
 
 
+def enable_display_coordinates():
+    """Call once at startup, before creating windows or capture objects."""
+    user32 = ctypes.WinDLL("user32", use_last_error=True)
+    set_dpi = user32.SetProcessDpiAwarenessContext
+    set_dpi.argtypes = [ctypes.c_void_p]
+    set_dpi.restype = ctypes.c_bool
+    if not set_dpi(ctypes.c_void_p(-4)):
+        raise ctypes.WinError(ctypes.get_last_error())
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--process-name", default="iVMS-4200.exe",
@@ -65,14 +75,8 @@ def main():
     if not 0 < args.threshold <= 1:
         parser.error("threshold must be greater than 0 and at most 1")
 
-    # Use physical pixels consistently on displays with Windows scaling enabled.
     try:
-        user32 = ctypes.WinDLL("user32", use_last_error=True)
-        set_dpi = user32.SetProcessDpiAwarenessContext
-        set_dpi.argtypes = [ctypes.c_void_p]
-        set_dpi.restype = ctypes.c_bool
-        if not set_dpi(ctypes.c_void_p(-4)):
-            raise ctypes.WinError(ctypes.get_last_error())
+        enable_display_coordinates()
     except (AttributeError, OSError) as error:
         parser.exit(1, f"Cannot establish physical-pixel display coordinates: {error}\n")
 

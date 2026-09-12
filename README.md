@@ -5,6 +5,7 @@ A Python tool that detects Play-button icons in iVMS-4200 camera views.
 - Detect buttons in a saved screenshot and print their locations.
 - Preview detections in the active iVMS window on Windows.
 - Pause live detection when another application is active.
+- Use a Tkinter control window with Start/Stop, status, count, and editable settings.
 
 The current version only reports detections. It does not click buttons or save live captures. Live Windows capture is awaiting testing; saved-image detection has been tested on Windows with Python 3.14.7. The reference icon uses a fixed size, so display scaling or a different interface may require adjustment.
 
@@ -24,6 +25,16 @@ py -m venv .venv
 ```
 
 ## Run
+
+Open the control window (Tkinter is included in standard Python Windows installs):
+
+```bat
+.venv\Scripts\python control_window.py
+```
+
+Choose the executable name and check interval, press **Start detection**, then switch to iVMS. Settings can be edited when stopped. Looking at the control window pauses detection because iVMS is no longer active; the last observation stays visible. **Stop** ends monitoring. Capture and detection run in a background thread so the interface remains responsive. Settings apply to the current session and are not saved to disk.
+
+Actual Windows capture and GUI testing are still pending. On other platforms the window opens for preview with detection disabled.
 
 Detect buttons in your own saved screenshot:
 
@@ -50,7 +61,7 @@ If detection stays paused, confirm the exact iVMS executable name in Task Manage
 ## Tests
 
 ```bat
-.venv\Scripts\python -m unittest test_live_detection.py
+.venv\Scripts\python -m unittest discover
 ```
 
 Tests use synthetic images and mocked Windows calls. Two example shop screenshots are included: `for mac2.png` shows stopped cameras with four Play buttons; `for mac.png` shows active cameras with no central Play buttons.
